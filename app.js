@@ -4,9 +4,12 @@ const parser = require('body-parser');
 const mongoose = require('mongoose');
 const encrypt = require('mongoose-encryption');
 const md5 = require('md5');
+const cookie = require('cookie-parser');
+
+var list = [];
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/Users',(err)=>{
+mongoose.connect('mongodb+srv://kumi:kumi@cluster0.qze8u.mongodb.net/Users?retryWrites=true&w=majority',(err)=>{
     if(err)
     console.log(err);
     else
@@ -29,10 +32,12 @@ const schema = new mongoose.Schema({
 
 app.set('view engine','ejs');
 app.use(parser.urlencoded({ extended: false }))
+app.use(cookie())
 
 app.get('/',(req,res)=>{
-
-    res.render('Login');
+    res.cookie('isLoggedIn','False');
+    res.cookie('email','');
+    res.render('Login',{text:''});
 })
 app.get('/signup',(req,res)=>{
     res.render('Signup');
@@ -45,7 +50,7 @@ app.post('/signup',(req,res)=>{
         password:md5(pass)
     })
     x.save();
-    res.render('welcome',{emailx:email});
+    res.render('Login',{text:'Sign Up successfull !'});
 
 })
 
@@ -55,14 +60,19 @@ app.post('/login',(req,res)=>{
 
         if(err)
        {
-        res.send("NOT Found");
+        res.render('Login',{text:'Login Unsuccessful !'});
        }
         else
         {
             if(response.password===md5(req.body.password))
-                res.render('welcome',{emailx:req.body.email});
+                {
+                    
+                    res.cookie('isLoggedIn','True');
+                    res.cookie('email',req.body.email);
+                    res.render('welcome',{emailx:req.body.email,list:list});
+                }
             else
-                res.send("NOT Found");
+            res.render('Login',{text:'Login Unsuccessful !'});
         }
 
     })
@@ -70,4 +80,18 @@ app.post('/login',(req,res)=>{
     
 })
 
-app.listen(80);
+app.get('/logout',(req,res)=>{
+    res.cookie('isLoggedIn','False');
+    res.cookie('email','');
+    res.render('Login',{text:''})
+    list=[];
+})
+
+app.post('/todo',(req,res)=>{
+        list.push(req.body.text);
+        res.render('welcome',{emailx:req.cookies.email,list:list})
+})
+
+
+
+app.listen(process.env.PORT || 3000);

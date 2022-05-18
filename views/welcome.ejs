@@ -25,18 +25,75 @@
             color:white;
             background-color: rgb(32, 32, 116);
         }
-        
+        .todo{
+            margin: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            
+        }
+        .btn1{
+            background-color: white;
+        }
+        .btn1:hover{
+            background-color: grey;
+        }
+        .list
+        {
+            display: flex;
+            justify-content: center;
+
+        }
+        ul{
+            list-style-type: none;
+
+        }
+        li{
+            height: 40px;
+            margin: 5px;
+            width: 50ch;
+            font-size: larger;
+            background-color: aquamarine;
+        }
+        .warning{
+            width: 100%;
+            color: red;
+            display: flex;
+            justify-content: center;
+        }
     </style>
     <title>Sign Up</title>
 </head>
 <body>
-    <%- include('Navbar.ejs') %>
+    
     <div class="x">
-        <span class="y">Welcome <%=emailx%> to the Secrets Page!</span>
-        <form action="/" method="get">
+        <span class="y">Welcome <%=emailx%> to the Todo List!</span>
+        <form action="/logout" method="get">
             <button class="btn" >Logout</button>
         </form>
     </div>
+
+        <div class="todo">
+            <form action="/todo" method="post">
+                <input type="text" class="text" name="text" placeholder="enter">
+                <button class="btn1">Submit</button>
+            </form>
+        </div>
+
+        <div class="list">
+            <ul>
+                <%for(var i=0;i<list.length;i++){%>
+                    <li><%=i+1%>)<%=" " + list[i]%></li>
+                <%}%>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h1>Remeber the Todo's will vanish once you Logout!</h1>
+        </div>
+
+
+    
 
 </body>
 </html>

@@ -11,9 +11,10 @@
         .x{
             margin-top: 10vh;
                 display: flex;
-        
-            justify-content: center;
-        }
+                flex-direction: column;        
+                justify-content: center;
+                align-items: center;
+            }
     .y{
         padding: 10px;
         display: flex;
@@ -51,6 +52,10 @@
         color: white;
         background-color: rgb(17, 17, 101);
     }
+    .heading{
+       
+        margin: 5px;
+    }
     </style>
     <title>Login Page</title>
 
@@ -58,6 +63,7 @@
 <body>
     <%- include('Navbar.ejs') %>
     <div class="x">
+        <div class="heading"><h2><%=text%></h2></div>
         <div class="y">
                 <div class="header">Login</div>
                 <form action="/login" method="post" class="form">
